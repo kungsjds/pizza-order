@@ -1,3 +1,5 @@
+let modalQt = 1;
+
 const s = (el) => document.querySelector(el);
 const sa = (el) => document.querySelectorAll(el);
 
@@ -17,6 +19,7 @@ pizzaJson.map((item, index) =>{
         e.preventDefault();
         // .target is the selected element('a'). | .closest get the closest element of the target and after that get the attribute data-key
         let key = e.target.closest('.pizza-item').getAttribute('data-key');        
+        modalQt = 1;
 
         // set pizzaJSON values at position X(key)
         s('.pizzaBig img').src = pizzaJson[key].img;
@@ -24,10 +27,13 @@ pizzaJson.map((item, index) =>{
         s('.pizzaInfo--desc').innerHTML = pizzaJson[key].description;  
         
         s('.pizzaInfo--size.selected').classList.remove('selected');
+        // Set the size value for each pizzainfo--size
         sa('.pizzaInfo--size').forEach((size, sizeIndex)=>{
             if (sizeIndex == 2) {
                 size.classList.add('selected');
             };
+
+            s('.pizzaInfo--qt').innerHTML = modalQt;
 
             size.querySelector('span').innerHTML = pizzaJson[key].price[sizeIndex].size;
         });
@@ -42,4 +48,17 @@ pizzaJson.map((item, index) =>{
     });
 
     s('.pizza-area').append(pizzaItem);
+});
+
+// Close pizza window area
+function closeModal() {
+    s('.pizzaWindowArea').style.opacity = 0;
+    setTimeout(()=>{
+        s('.pizzaWindowArea').style.display = 'none';
+    }, 500);
+};
+
+// Set click event for each button
+sa('.pizzaInfo--cancelButton, .pizzaInfo--cancelMobileButton').forEach((item)=>{
+    item.addEventListener('click', closeModal);
 });

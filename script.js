@@ -92,9 +92,7 @@ s('.pizzaInfo--qtmais').addEventListener('click', ()=>{
 
 s('.pizzaInfo--addButton').addEventListener('click', ()=>{
     let size = parseInt(s('.pizzaInfo--size.selected').getAttribute('data-key'));
-
     let identifier = `${pizzaJson[modalKey].id}@${size}`;
-
     let key = cart.findIndex((item) => item.identifier == identifier);
 
     if (key > -1){
@@ -108,5 +106,43 @@ s('.pizzaInfo--addButton').addEventListener('click', ()=>{
         });
     }
 
+    updateCart();
     closeModal();
 });
+
+function updateCart() {
+    if (cart.length > 0) {      
+        s('.cart').innerHTML = '';
+
+        for (let i in cart) {
+            let pizzaItem = pizzaJson.find((item)=>item.id == cart[i].id);
+            let cartItem = s('.models .cart--item').cloneNode(true);
+
+            let pizzaSize = '';
+
+            switch(cart[i].size){
+                case 0:
+                    pizzaSize = 'P';
+                    break;
+                case 1:
+                    pizzaSize = 'M';
+                    break;
+                case 2:
+                    pizzaSize = 'G';
+                    break;
+            };
+
+            let pizzaName = `${pizzaItem.name} (${pizzaSize})`;
+
+            cartItem.querySelector('img').src = pizzaItem.img;
+            cartItem.querySelector('.cart--item-nome').innerHTML = pizzaName;
+            cartItem.querySelector('.cart--item--qt').innerHTML = cart[i].qt;
+
+            s('.cart').append(cartItem);
+        };
+
+        s('aside').classList.add('show');
+    } else {
+        s('aside').classList.remove('show');
+    };
+};
